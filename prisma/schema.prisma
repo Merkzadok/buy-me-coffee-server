@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,17 +13,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id Int @id @default(autoincrement())
+  email String @unique
+  password String?
+  username String? @unique @db.VarChar(255)
+  receivedDonations Donations[] @relation("ReceivedDonations")
+  donations Donations[] @relation("Donations")
+  createdAt DateTime @default(now())
+  profileId Int? 
+  profile Profile? 
+  bankCard BankCard? @relation("BankCard")
+  updatedAt DateTime @default(now()) @updatedAt
+}
+model Donations {
+  id Int @id @default(autoincrement())
+  amount Int
+  specialMessage String?
+  socialURLOrBuyMeACoffee String?
+  donorId Int
+  donor User @relation("Donations", fields: [donorId], references: [id])
+  user User @relation("ReceivedDonations",fields: [recipientId], references: [id])
+  recipientId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+model BankCard {
+  id Int @id @default(autoincrement())
+  country String
+  firstName String
+  lastName String
+  cardNumber String 
+  expiryDate DateTime
+  userId Int @unique
+  user User @relation("BankCard", fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model Profile {
+  id Int @id @default(autoincrement())
+  name String
+  about String?
+  avatarImage String
+  socialMediaURL String?
+  backgroundImage String?
+  successMessage String
+  userId Int @unique
+  user User @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
