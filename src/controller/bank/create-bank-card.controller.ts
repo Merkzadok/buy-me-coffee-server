@@ -1,6 +1,5 @@
 import { Response, Request } from "express";
 import { prisma } from "../../utils/prisma";
-
 function isValidCardNumber(cardNumber: string): boolean {
   if (!/^\d{16}$/.test(cardNumber)) return false;
 
@@ -34,6 +33,7 @@ function isValidExpiryDate(dateStr: string): boolean {
 
 export const createBankCard = async (req: Request, res: Response) => {
   const { country, firstName, lastName, cardNumber, expiryDate } = req.body;
+
   const { userId } = req.params;
 
   if (!isValidExpiryDate(expiryDate)) {
@@ -48,9 +48,7 @@ export const createBankCard = async (req: Request, res: Response) => {
         lastName,
         cardNumber,
         expiryDate: new Date(expiryDate),
-        user: {
-          connect: { id: Number(userId) },
-        },
+        userId: Number(userId),
       },
     });
 
