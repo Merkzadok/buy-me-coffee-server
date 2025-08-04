@@ -27,3 +27,7 @@ export const postDonation = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+export const createDonation = async (req: Request, res: Response) => {
+  
+};
