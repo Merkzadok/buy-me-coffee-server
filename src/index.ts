@@ -6,6 +6,7 @@ import profileRouter from "./router/profile.router";
 const port = 4200;
 const app = express();
 
+
 app.use(express.json());
 
 app.use("/user", userRouter);
