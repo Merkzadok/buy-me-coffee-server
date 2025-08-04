@@ -42,7 +42,7 @@ export const createUser = async (req: Request, res: Response) => {
 
       const accessToken = jwt.sign({ exp: hour, data }, secret);
 
-      return res.status(200).json({ success: true, accessToken });
+      return res.status(200).json({ success: true, accessToken, user });
     } else {
       return res.status(400).json({ message: "Password mismatch" });
     }
