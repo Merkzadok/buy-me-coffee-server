@@ -22,7 +22,7 @@ model User {
   donations Donations[] @relation("Donations")
   createdAt DateTime @default(now())
   profileId Int? 
-  profile Profile? 
+  profile Profile?
   bankCard BankCard? @relation("BankCard")
   updatedAt DateTime @default(now()) @updatedAt
 }
