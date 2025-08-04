@@ -1,7 +1,11 @@
 import { Response, Request } from "express";
 import { prisma } from "../../utils/prisma";
+
+// function isValidCardNumber(cardNumber: string): boolean {
+//   if (!/^\d{16}$/.test(cardNumber)) return false;
+
 function isValidCardNumber(cardNumber: string): boolean {
-  if (!/^\d{16}$/.test(cardNumber)) return false;
+  return /^\d{16}$/.test(cardNumber);
 
   let sum = 0;
   let shouldDouble = false;
@@ -52,7 +56,14 @@ export const createBankCard = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(200).json({ bankCard });
+    res.status(200).json({
+      bankCard: {
+        ...bankCard,
+        expiryDate: bankCard.expiryDate.toISOString().slice(0, 10),
+        createdAt: bankCard.createdAt.toISOString().slice(0, 10),
+        updatedAt: bankCard.updatedAt.toISOString().slice(0, 10),
+      },
+    });
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : "Internal Server Error",
