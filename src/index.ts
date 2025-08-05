@@ -7,7 +7,6 @@ import bankCardRouter from "./router/bank.router";
 const port = 4200;
 const app = express();
 
-
 app.use(express.json());
 
 app.use("/user", userRouter);
