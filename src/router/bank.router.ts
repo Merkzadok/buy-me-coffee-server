@@ -1,11 +1,14 @@
 import express from "express";
 import { createBankCard } from "../controller/bank/create-bank-card.controller";
 import { getBankCardByUserId } from "../controller/bank/get-bank-card.controller";
+import { UpdateBankCardById } from "../controller/bank/update-bank-card.controller";
 
 const bankCardRouter = express.Router();
 
 bankCardRouter.post("/:userId", createBankCard);
 
 bankCardRouter.get("/:userId", getBankCardByUserId);
+
+bankCardRouter.put("/:bankCardId", UpdateBankCardById);
 
 export default bankCardRouter;
