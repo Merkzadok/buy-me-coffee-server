@@ -23,6 +23,7 @@ model User {
   createdAt DateTime @default(now())
   profileId Int? 
   profile Profile?
+  bankCardId Int?
   bankCard BankCard? @relation("BankCard")
   updatedAt DateTime @default(now()) @updatedAt
 }

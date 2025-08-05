@@ -13,6 +13,7 @@ export const createUser = async (req: Request, res: Response) => {
     profileId,
     profile,
     bankCard,
+    bankCardId,
   } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,6 +29,7 @@ export const createUser = async (req: Request, res: Response) => {
         profileId,
         profile,
         bankCard,
+        bankCardId: bankCardId,
       },
     });
 
@@ -42,7 +44,7 @@ export const createUser = async (req: Request, res: Response) => {
 
       const accessToken = jwt.sign({ exp: hour, data }, secret);
 
-      return res.status(200).json({ success: true, accessToken, user });
+      return res.status(200).json({ success: true, accessToken });
     } else {
       return res.status(400).json({ message: "Password mismatch" });
     }
