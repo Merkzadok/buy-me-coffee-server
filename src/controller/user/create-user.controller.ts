@@ -13,6 +13,7 @@ export const createUser = async (req: Request, res: Response) => {
     profileId,
     profile,
     bankCard,
+    bankCardId,
   } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,6 +29,7 @@ export const createUser = async (req: Request, res: Response) => {
         profileId,
         profile,
         bankCard,
+        bankCardId: bankCardId,
       },
     });
 

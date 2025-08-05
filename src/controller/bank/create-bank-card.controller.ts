@@ -40,11 +40,16 @@ export const createBankCard = async (req: Request, res: Response) => {
 
   const { userId } = req.params;
 
-  if (!isValidExpiryDate(expiryDate)) {
-    return res.status(400).json({ message: "Invalid expiry date" });
-  }
+  // if (!isValidCardNumber(cardNumber)) {
+  //   return res.status(400).json({ message: "Invalid card number" });
+  // }
+
+  // if (!isValidExpiryDate(expiryDate)) {
+  //   return res.status(400).json({ message: "Invalid expiry date" });
+  // }
 
   try {
+    // 1️⃣ Create bank card
     const bankCard = await prisma.bankCard.create({
       data: {
         country,
@@ -56,6 +61,13 @@ export const createBankCard = async (req: Request, res: Response) => {
       },
     });
 
+    // 2️⃣ Update user's bankCardId
+    await prisma.user.update({
+      where: { id: Number(userId) },
+      data: { bankCardId: bankCard.id },
+    });
+
+    // 3️⃣ Send response with formatted dates
     res.status(200).json({
       bankCard: {
         ...bankCard,
