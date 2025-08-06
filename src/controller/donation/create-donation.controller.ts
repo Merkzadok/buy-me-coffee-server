@@ -8,6 +8,9 @@ export const postDonation = async (req: Request, res: Response) => {
     socialURLOrBuyMeACoffee,
     donorId,
     recipientId,
+    createdAt,
+    updatedAt,
+
   } = req.body;
 
   try {
@@ -18,6 +21,8 @@ export const postDonation = async (req: Request, res: Response) => {
         socialURLOrBuyMeACoffee,
         donorId,
         recipientId,
+        createdAt,
+        updatedAt,
       },
     });
 
