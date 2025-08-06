@@ -4,6 +4,7 @@ import { getUserById } from "../controller/user/get-user-by-id.controller";
 import { getUser } from "../controller/user/get-users.controller";
 import { deleteUser } from "../controller/user/delete-user.controller";
 import { UpdateUser } from "../controller/user/update-user.controller";
+import { checkUserName } from "../controller/user/check-user-name-available.controller";
 
 const userRouter = express.Router();
 
@@ -16,5 +17,7 @@ userRouter.get("/", getUser);
 userRouter.delete("/:userId", deleteUser);
 
 userRouter.put("/:userId", UpdateUser);
+
+userRouter.post("/check-username", checkUserName);
 
 export default userRouter;

@@ -11,14 +11,23 @@ export const createUser = async (req: Request, res: Response) => {
     receivedDonations,
     donations,
     profileId,
-    profile,
-    bankCard,
     bankCardId,
   } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
+    const checkUserName = await prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    if (checkUserName) {
+      res.status(500).json({ message: "Username has been taken" });
+      return;
+    }
+
     const user = await prisma.user.create({
       data: {
         email,
@@ -27,8 +36,6 @@ export const createUser = async (req: Request, res: Response) => {
         receivedDonations,
         donations,
         profileId,
-        profile,
-        bankCard,
         bankCardId: bankCardId,
       },
     });
