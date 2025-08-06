@@ -9,7 +9,7 @@ const donationRouter = express.Router();
 
 donationRouter.post("/create-donation", postDonation);
 
-donationRouter.get("/received", receivedDonation);
+donationRouter.get("/received/:userId", receivedDonation);
 
 donationRouter.get("/:userId", receivedDonationById);
 
@@ -18,6 +18,5 @@ donationRouter.delete("/:userId", deletedById);
 // donationRouter.delete("/deletedMany",deleted)
 
 // donationRouter.get("/total-earnings/:userId", totalDonation);
-
 
 export default donationRouter;

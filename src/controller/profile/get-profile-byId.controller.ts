@@ -4,6 +4,8 @@ import { prisma } from "../../utils/prisma";
 export const getCurrentProfileById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
+  console.log(id);
+
   try {
     const profile = await prisma.profile.findUnique({
       where: {

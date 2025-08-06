@@ -5,13 +5,13 @@ export const receivedDonationById = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
   try {
-    const post = await prisma.donations.findUnique({
+    const donamtions = await prisma.donations.findMany({
       where: {
         id: Number(userId),
       },
     });
 
-    res.status(200).json(post);
+    res.status(200).json(donamtions);
   } catch (error) {
     res.status(500).json({ message: error });
     console.log(error);

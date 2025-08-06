@@ -29,7 +29,7 @@ export const createUser = async (req: Request, res: Response) => {
         profileId,
         profile,
         bankCard,
-        bankCardId: bankCardId,
+        bankCardId: Number(bankCardId),
       },
     });
 
