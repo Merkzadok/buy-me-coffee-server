@@ -16,6 +16,6 @@ app.use("/profile", profileRouter);
 app.use("/donation", donationRouter);
 
 app.listen(port, async () => {
-  //   await connectDb();
+ 
   console.log(`Example app listening on port http://localhost:${port}`);
 });
