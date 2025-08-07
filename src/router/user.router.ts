@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser } from "../controller/user/create-user.controller";
+// import { createUser } from "../controller/user/create-user.controller";
 import { getUserById } from "../controller/user/get-user-by-id.controller";
 import { getUser } from "../controller/user/get-users.controller";
 import { deleteUser } from "../controller/user/delete-user.controller";
@@ -9,7 +9,7 @@ import { signIn } from "../controller/user/sign-in.controller";
 
 const userRouter = express.Router();
 
-userRouter.post("/", createUser);
+// userRouter.post("/", createUser);
 
 userRouter.get("/:userId", getUserById);
 
