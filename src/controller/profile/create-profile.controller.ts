@@ -9,8 +9,6 @@ export const createProfile = async (req: Request, res: Response) => {
     socialMediaURL,
     backgroundImage,
     successMessage,
-    createdAt,
-    updatedAt,
   } = req.body;
   const { userId } = req.params;
   try {
@@ -21,10 +19,8 @@ export const createProfile = async (req: Request, res: Response) => {
         userId: Number(userId),
         avatarImage,
         socialMediaURL,
-        backgroundImage,
-        successMessage,
-        createdAt,
-        updatedAt,
+        backgroundImage: " ",
+        successMessage: " ",
       },
     });
 
@@ -37,8 +33,9 @@ export const createProfile = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(200).json({ message: profile });
+    res.status(200).json({ profile: updatedUser });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error });
   }
 };
