@@ -45,11 +45,11 @@ export const createUser = async (req: Request, res: Response) => {
     if (await isMatch) {
       const data = { userId: user.id, email: user.email };
 
-      const secret = "super-secret-123456";
+      const secret = process.env.NEXT_PUBLIC_URL_JWT_SECRET;
 
       const hour = Math.floor(Date.now() / 1000) + 60 * 60;
 
-      const accessToken = jwt.sign({ exp: hour, data }, secret);
+      const accessToken = jwt.sign({ exp: hour, data }, secret as string);
 
       return res.status(200).json({ success: true, accessToken });
     } else {
@@ -57,5 +57,6 @@ export const createUser = async (req: Request, res: Response) => {
     }
   } catch (error) {
     res.status(500).json({ message: error });
+    console.log(error);
   }
 };
