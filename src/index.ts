@@ -20,6 +20,5 @@ app.use("/donation", donationRouter);
 app.use("/bank-card", bankCardRouter);
 
 app.listen(port, async () => {
- 
   console.log(`Example app listening on port http://localhost:${port}`);
 });
