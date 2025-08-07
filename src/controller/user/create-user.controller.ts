@@ -1,62 +1,71 @@
-import { Request, Response } from "express";
+import { Response, Request } from "express";
 import { prisma } from "../../utils/prisma";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
-export const createUser = async (req: Request, res: Response) => {
-  const {
-    email,
-    password,
-    username,
-    receivedDonations,
-    donations,
-    profileId,
-    bankCardId,
-  } = req.body;
+// ✅ Basic 16-digit number check
+function isValidCardNumber(cardNumber: string): boolean {
+  return /^\d{16}$/.test(cardNumber);
+}
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+// ✅ Basic YYYY-MM-DD format check (not future validation)
+function isValidExpiryDate(dateStr: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(dateStr);
+}
+
+export const createBankCard = async (req: Request, res: Response) => {
+  const { country, firstName, lastName, cardNumber, expiryDate } = req.body;
+  const { userId } = req.params;
+
+  // ✅ Validate card number
+  if (!isValidCardNumber(cardNumber)) {
+    return res.status(400).json({ message: "Card number must be 16 digits" });
+  }
+
+  // ✅ Validate expiry date format
+  if (!isValidExpiryDate(expiryDate)) {
+    return res
+      .status(400)
+      .json({ message: "Expiry date must be in YYYY-MM-DD format" });
+  }
 
   try {
-    const checkUserName = await prisma.user.findUnique({
-      where: {
-        username,
-      },
-    });
+    // ✅ Safely parse date string to Date object
+    const parsedExpiryDate = new Date(expiryDate);
 
-    if (checkUserName) {
-      res.status(500).json({ message: "Username has been taken" });
-      return;
+    // ✅ Additional safety check in case it's an invalid date (e.g. 2025-02-30)
+    if (isNaN(parsedExpiryDate.getTime())) {
+      return res
+        .status(400)
+        .json({ message: "Expiry date is not a valid calendar date" });
     }
 
-    const user = await prisma.user.create({
+    const bankCard = await prisma.bankCard.create({
       data: {
-        email,
-        password: hashedPassword,
-        username,
-        receivedDonations,
-        donations,
-        profileId,
-        bankCardId: bankCardId,
+        country,
+        firstName,
+        lastName,
+        cardNumber,
+        expiryDate: parsedExpiryDate,
+        userId: Number(userId),
       },
     });
 
-    const isMatch = bcrypt.compare(password, user.password ?? "");
+    await prisma.user.update({
+      where: { id: Number(userId) },
+      data: { bankCardId: bankCard.id },
+    });
 
-    if (await isMatch) {
-      const data = { userId: user.id, email: user.email };
-
-      const secret = process.env.NEXT_PUBLIC_URL_JWT_SECRET;
-
-      const hour = Math.floor(Date.now() / 1000) + 60 * 60;
-
-      const accessToken = jwt.sign({ exp: hour, data }, secret as string);
-
-      return res.status(200).json({ success: true, accessToken });
-    } else {
-      return res.status(400).json({ message: "Password mismatch" });
-    }
+    res.status(200).json({
+      bankCard: {
+        ...bankCard,
+        expiryDate: bankCard.expiryDate.toISOString().slice(0, 10),
+        createdAt: bankCard.createdAt.toISOString().slice(0, 10),
+        updatedAt: bankCard.updatedAt.toISOString().slice(0, 10),
+      },
+    });
   } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error);
+    console.error("Error creating bank card:", error);
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Internal Server Error",
+    });
   }
 };
