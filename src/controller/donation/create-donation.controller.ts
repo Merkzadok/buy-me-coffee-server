@@ -10,7 +10,6 @@ export const postDonation = async (req: Request, res: Response) => {
     recipientId,
     createdAt,
     updatedAt,
-
   } = req.body;
 
   try {
@@ -31,8 +30,4 @@ export const postDonation = async (req: Request, res: Response) => {
     res.status(500).json({ message: error });
     console.log(error);
   }
-};
-
-export const createDonation = async (req: Request, res: Response) => {
-  
 };

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { prisma } from "../../utils/prisma";
 
-export const getCurrentUser = async (req: Request, res: Response) => {
-  const { userId } = req.params;
+export const getUser = async (req: Request, res: Response) => {
+  // const { userId } = req.params;
 
   try {
     const profile = await prisma.profile.findMany();
